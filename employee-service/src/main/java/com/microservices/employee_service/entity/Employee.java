@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "employees")
 public class Employee {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private  Long id;
@@ -18,4 +19,5 @@ public class Employee {
     private String lastName;
     @Column(nullable = false, unique = true)
     private String email;
+    private String departmentCode;
 }
