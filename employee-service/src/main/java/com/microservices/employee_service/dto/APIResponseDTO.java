@@ -11,4 +11,5 @@ public class APIResponseDTO {
 
     private EmployeeDTO employee;
     private DepartmentDTO department;
+    private String message;
 }
