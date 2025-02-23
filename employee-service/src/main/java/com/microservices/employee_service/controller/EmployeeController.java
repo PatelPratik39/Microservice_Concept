@@ -1,5 +1,6 @@
 package com.microservices.employee_service.controller;
 
+import com.microservices.employee_service.dto.APIResponseDTO;
 import com.microservices.employee_service.dto.EmployeeDTO;
 import com.microservices.employee_service.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +26,8 @@ public class EmployeeController {
 
 //    build get Employee RESTAPI
     @GetMapping("{id}")
-    public ResponseEntity<EmployeeDTO> getEmployee(@PathVariable("id") Long employeeId) {
-        EmployeeDTO employeeDTO = employeeService.getEmployeeById(employeeId);
-        return new ResponseEntity<>(employeeDTO, HttpStatus.OK);
+    public ResponseEntity<APIResponseDTO> getEmployee(@PathVariable("id") Long employeeId) {
+        APIResponseDTO apiResponseDTO = employeeService.getEmployeeById(employeeId);
+        return new ResponseEntity<>(apiResponseDTO, HttpStatus.OK);
     }
 }
