@@ -24,7 +24,7 @@ public class DepartmentController {
     }
 
 //    Build get department by code REST api
-    @GetMapping("/{departmentCode}") // ✅ Fixed Path Variable Naming
+    @GetMapping("/{departmentCode}")
     public ResponseEntity<DepartmentDTO> getDepartment(@PathVariable("departmentCode") String departmentCode) {
         DepartmentDTO departmentDTO = departmentService.getDepartmentByCode(departmentCode);
         if (departmentDTO == null) {

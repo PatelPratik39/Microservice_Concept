@@ -18,19 +18,19 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class EmployeeServiceImpl implements EmployeeService {
 
     private EmployeeRepository employeeRepository;
-    private WebClient.Builder webClient;
-
-//    private RestTemplate restTemplate;
+    //    private WebClient.Builder webClient;
+    private APIClient apiClient;
+    //    private RestTemplate restTemplate;
 
     @Override
     public EmployeeDTO saveEmployee(EmployeeDTO employeeDTO) {
 //                convert Employee DTO to Employee Entity
         Employee employee = new Employee(
-               employeeDTO.getId(),
-               employeeDTO.getFirstName(),
-               employeeDTO.getLastName(),
-               employeeDTO.getEmail(),
-               employeeDTO.getDepartmentCode()
+                employeeDTO.getId(),
+                employeeDTO.getFirstName(),
+                employeeDTO.getLastName(),
+                employeeDTO.getEmail(),
+                employeeDTO.getDepartmentCode()
         );
         Employee savedEmployee = employeeRepository.save(employee);
 
@@ -48,64 +48,100 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public APIResponseDTO getEmployeeById(Long employeeId) {
-        // Handle case where employee does not exist
         Employee employee = employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new ResourceNotFoundException("Employee not found with ID: " + employeeId));
 
-        APIResponseDTO apiResponseDTO = new APIResponseDTO();
-//        try {
-//            // Call department microservice
-//            ResponseEntity<DepartmentDTO> responseEntity = restTemplate.getForEntity(
-//                    "http://localhost:8081/api/department/" + employee.getDepartmentCode(),
-//                    DepartmentDTO.class);
-//            if (responseEntity.getStatusCode().is2xxSuccessful()) {
-//                departmentDTO = responseEntity.getBody();
-//                message = "Department found successfully : " + departmentDTO.getDepartmentCode();
-//            }
-//        } catch (Exception ex) {
-//            System.out.println("Error fetching department details: " + ex.getMessage());
-//        }
+        DepartmentDTO departmentDTO = null;
+        String message = "Department not found for department code: " + employee.getDepartmentCode();
 
-        // Convert Employee Entity -> DTO
-        // Convert Employee Entity -> DTO
-        EmployeeDTO employeeDTO = new EmployeeDTO(
+        try {
+            departmentDTO = apiClient.getDepartment(employee.getDepartmentCode());
+            if (departmentDTO != null) {
+                message = "Department found successfully: " + departmentDTO.getDepartmentCode();
+            }
+        } catch (Exception ex) {
+            message = "Error fetching department details: " + ex.getMessage();
+        }
+
+        EmployeeDTO savedEmployeeDTO = new EmployeeDTO(
                 employee.getId(),
                 employee.getFirstName(),
                 employee.getLastName(),
                 employee.getEmail(),
                 employee.getDepartmentCode()
         );
-        apiResponseDTO.setEmployee(employeeDTO);
 
-        DepartmentDTO departmentDTO = null;
-        String message = "Department not found for department code: " + employee.getDepartmentCode();
-
-        // Call Department Microservice asynchronously using WebClient
-        // Call Department Microservice using WebClient
-        try {
-            departmentDTO = webClient
-                    .build()
-                    .get()
-                    .uri("http://localhost:8081/api/department/" + employee.getDepartmentCode()) // ✅ Correct direct service call
-                    .retrieve()
-                    .bodyToMono(DepartmentDTO.class)
-                    .block(); // Blocking to wait for response
-
-            if (departmentDTO != null) {
-                message = "Department found successfully: " + departmentDTO.getDepartmentCode();
-            }
-
-        } catch (Exception ex) {
-            message = "Error fetching department details: " + ex.getMessage();
-        }
-
+        APIResponseDTO apiResponseDTO = new APIResponseDTO();
+        apiResponseDTO.setEmployee(savedEmployeeDTO);
         apiResponseDTO.setDepartment(departmentDTO);
         apiResponseDTO.setMessage(message);
 
         return apiResponseDTO;
-
-
     }
+}
+//    @Override
+//    public APIResponseDTO getEmployeeById(Long employeeId) {
+//        // Handle case where employee does not exist
+//        Employee employee = employeeRepository.findById(employeeId)
+//                .orElseThrow(() -> new ResourceNotFoundException("Employee not found with ID: " + employeeId));
+//
+//        APIResponseDTO apiResponseDTO = new APIResponseDTO();
+////        try {
+////            // Call department microservice
+////            ResponseEntity<DepartmentDTO> responseEntity = restTemplate.getForEntity(
+////                    "http://localhost:8081/api/department/" + employee.getDepartmentCode(),
+////                    DepartmentDTO.class);
+////            if (responseEntity.getStatusCode().is2xxSuccessful()) {
+////                departmentDTO = responseEntity.getBody();
+////                message = "Department found successfully : " + departmentDTO.getDepartmentCode();
+////            }
+////        } catch (Exception ex) {
+////            System.out.println("Error fetching department details: " + ex.getMessage());
+////        }
+//
+//        // Convert Employee Entity -> DTO
+//        // Convert Employee Entity -> DTO
+//        EmployeeDTO employeeDTO = new EmployeeDTO(
+//                employee.getId(),
+//                employee.getFirstName(),
+//                employee.getLastName(),
+//                employee.getEmail(),
+//                employee.getDepartmentCode()
+//        );
+//        apiResponseDTO.setEmployee(employeeDTO);
+//
+//        DepartmentDTO departmentDTO = null;
+//        String message = "Department not found for department code: " + employee.getDepartmentCode();
+//
+//        // Call Department Microservice asynchronously using WebClient
+//        // Call Department Microservice using WebClient
+//        try {
+//            departmentDTO = webClient
+//                    .build()
+//                    .get()
+//                    .uri("http://localhost:8081/api/department/" + employee.getDepartmentCode())
+//                    .retrieve()
+//                    .bodyToMono(DepartmentDTO.class)
+//                    .block(); // Blocking to wait for response
+//
+//            if (departmentDTO != null) {
+//                apiResponseDTO.setDepartment(departmentDTO);
+//                message = "Department found successfully: " + departmentDTO.getDepartmentCode();
+//            }
+//
+//        } catch (Exception ex) {
+//            message = "Error fetching department details: " + ex.getMessage();
+//        }
+//
+//        apiResponseDTO.setDepartment(departmentDTO);
+//        apiResponseDTO.setMessage(message);
+//
+//        return apiResponseDTO;
+//
+//
+//    }
+
+
 //        DepartmentDTO departmentDTO = webClient.build().get()
 //                .uri("http://localhost:8081/api/department/" + employee.getDepartmentCode())
 //                .retrieve()
@@ -127,4 +163,4 @@ public class EmployeeServiceImpl implements EmployeeService {
 //        return apiResponseDTO;
 
 
-}
+//}
