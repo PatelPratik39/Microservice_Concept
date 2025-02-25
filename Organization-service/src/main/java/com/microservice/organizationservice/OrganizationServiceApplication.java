@@ -8,7 +8,7 @@ public class OrganizationServiceApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(OrganizationServiceApplication.class, args);
-		System.out.println("💼 Organization Service Application Started Successfully...✅");
+		System.err.println("💼 Organization Service Application Started Successfully...✅");
 	}
 
 }

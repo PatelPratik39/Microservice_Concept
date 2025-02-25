@@ -17,9 +17,9 @@ public class Organization {
     private Long id;
     @Column(nullable = false)
     private String organizationName;
+    private String organizationDescription;
     @Column(nullable = false, unique = true)
     private String organizationCode;
-    private String organizationDescription;
     @CreationTimestamp
     private String createdDate;
 }

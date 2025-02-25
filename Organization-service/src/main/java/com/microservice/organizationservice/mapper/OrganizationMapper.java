@@ -6,7 +6,7 @@ import com.microservice.organizationservice.entity.Organization;
 public class OrganizationMapper {
 
 //    convert entity to DTO
-    public static OrganizationDTO toOrganizationDTO(Organization organization) {
+    public static OrganizationDTO mapToOrganizationDTO(Organization organization) {
         OrganizationDTO organizationDTO = new OrganizationDTO(
                 organization.getId(),
                 organization.getOrganizationName(),
@@ -18,7 +18,7 @@ public class OrganizationMapper {
     }
 
 //    Convert DTO to Entity
-    public static Organization toOrganization(OrganizationDTO organizationDTO) {
+    public static Organization mapToOrganization(OrganizationDTO organizationDTO) {
         Organization organization = new Organization(
                 organizationDTO.getId(),
                 organizationDTO.getOrganizationName(),
