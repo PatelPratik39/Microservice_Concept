@@ -19,6 +19,7 @@ public class EmployeeServiceApplication {
 //	}
 
 //	Configure WebClinet from webflux dependency
+
 	@Bean
 	public WebClient webClient(){
 		return WebClient.builder().build();
@@ -26,7 +27,7 @@ public class EmployeeServiceApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(EmployeeServiceApplication.class, args);
-		System.err.println("Employee Service Application Started Successfully ✅✅✅✅");
+		System.err.println("🧑🏻‍💻 Employee Service Application Started Successfully ✅✅✅✅");
 	}
 
 }
