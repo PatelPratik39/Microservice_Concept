@@ -1,9 +1,10 @@
-package com.microservices.departmentservice.service;
+package com.microservices.departmentservice.service.impl;
 
 import com.microservices.departmentservice.dto.DepartmentDTO;
 import com.microservices.departmentservice.entity.Department;
 import com.microservices.departmentservice.mapper.DepartmentMapper;
 import com.microservices.departmentservice.repository.DepartmentRepository;
+import com.microservices.departmentservice.service.DepartmentService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,12 +26,6 @@ public class DepartmentServiceImpl implements DepartmentService {
     public DepartmentDTO getDepartmentByCode(String departmentCode) {
         Department department = departmentRepository.findByDepartmentCode(departmentCode);
         DepartmentDTO departmentDTO = DepartmentMapper.mapToDepartmentDTO(department);
-//        DepartmentDTO departmentDTO = new DepartmentDTO(
-//                department.getId(),
-//                department.getDepartmentName(),
-//                department.getDepartmentDescription(),
-//                department.getDepartmentCode()
-//        );
         return departmentDTO;
     }
 }

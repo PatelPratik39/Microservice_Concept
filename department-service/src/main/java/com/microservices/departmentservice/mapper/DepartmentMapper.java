@@ -5,6 +5,8 @@ import com.microservices.departmentservice.entity.Department;
 
 public class DepartmentMapper {
 
+//    Convert Entity to DTO
+
     public static DepartmentDTO mapToDepartmentDTO(Department department){
         DepartmentDTO departmentDTO = new DepartmentDTO(
                 department.getId(),
@@ -14,6 +16,7 @@ public class DepartmentMapper {
         );
         return departmentDTO;
     }
+//    convert DTO to entity
     public static Department mapToDepartment(DepartmentDTO departmentDTO){
         Department department = new Department(
                 departmentDTO.getId(),

@@ -4,7 +4,7 @@ import com.microservices.employee_service.dto.APIResponseDTO;
 import com.microservices.employee_service.dto.DepartmentDTO;
 import com.microservices.employee_service.dto.EmployeeDTO;
 import com.microservices.employee_service.entity.Employee;
-//import com.microservices.employee_service.mapper.EmployeeMapper;
+import com.microservices.employee_service.mapper.EmployeeMapper;
 import com.microservices.employee_service.exception.ResourceNotFoundException;
 import com.microservices.employee_service.repository.EmployeeRepository;
 import com.microservices.employee_service.service.APIClient;
@@ -35,25 +35,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public EmployeeDTO saveEmployee(EmployeeDTO employeeDTO) {
-//                convert Employee DTO to Employee Entity
-        Employee employee = new Employee(
-                employeeDTO.getId(),
-                employeeDTO.getFirstName(),
-                employeeDTO.getLastName(),
-                employeeDTO.getEmail(),
-                employeeDTO.getDepartmentCode()
-        );
+
+        Employee employee = EmployeeMapper.mapToEmployee(employeeDTO);   // convert Employee DTO to Employee Entity
         Employee savedEmployee = employeeRepository.save(employee);
-
-//        convert Employee Entity to EmployeeDTO
-
-        EmployeeDTO savedEmployeeDTO = new EmployeeDTO(
-                savedEmployee.getId(),
-                savedEmployee.getFirstName(),
-                savedEmployee.getLastName(),
-                savedEmployee.getEmail(),
-                savedEmployee.getDepartmentCode()
-        );
+        EmployeeDTO savedEmployeeDTO = EmployeeMapper.toEmployeeDTO(savedEmployee);  //convert Employee Entity to EmployeeDTO
         return savedEmployeeDTO;
     }
 
@@ -66,7 +51,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         Employee employee = employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new ResourceNotFoundException("Employee not found with ID: " + employeeId));
-
 
         APIResponseDTO apiResponseDTO = new APIResponseDTO();
 
@@ -92,14 +76,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             throw ex;
         }
         // Create EmployeeDTO
-        EmployeeDTO employeeDTO = new EmployeeDTO(
-                employee.getId(),
-                employee.getFirstName(),
-                employee.getLastName(),
-                employee.getEmail(),
-                employee.getDepartmentCode()
-        );
-
+        EmployeeDTO employeeDTO = EmployeeMapper.toEmployeeDTO(employee);
         // Build API Response DTO
         apiResponseDTO.setEmployee(employeeDTO);
         apiResponseDTO.setDepartment(departmentDTO);
@@ -120,7 +97,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         APIResponseDTO apiResponseDTO = new APIResponseDTO();
         apiResponseDTO.setMessage("Fallback response: Unable to fetch department details due to: " + exception.getMessage());
 
-
         DepartmentDTO departmentDTO = new  DepartmentDTO();
         departmentDTO.setDepartmentName("R&D Department");
         departmentDTO.setDepartmentCode("RD001");
@@ -128,13 +104,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         apiResponseDTO.setDepartment(departmentDTO);
 
-        EmployeeDTO employeeDTO = new EmployeeDTO(
-                employee.getId(),
-                employee.getFirstName(),
-                employee.getLastName(),
-                employee.getEmail(),
-                employee.getDepartmentCode()
-        );
+        EmployeeDTO employeeDTO = EmployeeMapper.toEmployeeDTO(employee);
 //        APIResponseDTO apiResponseDTO = new APIResponseDTO();
         apiResponseDTO.setEmployee(employeeDTO);
 //        apiResponseDTO.setDepartment(departmentDTO);
