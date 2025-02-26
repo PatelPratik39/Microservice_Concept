@@ -4,7 +4,7 @@ import EmployeeComponent from "./component/EmployeeComponent";
 function App() {
   return (
     <>
-      <div>
+      <div className="conatiner">
         <h1> Hello Microservice and React</h1>
         <EmployeeComponent />
       </div>
