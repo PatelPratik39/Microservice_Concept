@@ -13,9 +13,9 @@ export default class EmployeeComponent extends Component {
 
   componentDidMount() {
     EmployeeService.getEmployee().then((response) => {
-      this.setState({ employee: response.employee });
-      this.setState({ department: response.department });
-      this.setState({ organization: response.organization });
+      this.setState({ employee: response.data.employee });
+      this.setState({ department: response.data.department });
+      this.setState({ organization: response.data.organization });
 
       console.log(this.state.employee);
       console.log(this.state.department);
