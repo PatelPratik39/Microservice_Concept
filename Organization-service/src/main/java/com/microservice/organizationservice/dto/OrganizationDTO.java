@@ -3,6 +3,7 @@ package com.microservice.organizationservice.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,5 +14,5 @@ public class OrganizationDTO {
     private String organizationName;
     private String organizationDescription;
     private String organizationCode;
-    private String createdDate;
+    private LocalDateTime createdDate;
 }

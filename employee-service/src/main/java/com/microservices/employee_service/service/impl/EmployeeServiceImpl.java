@@ -3,6 +3,7 @@ package com.microservices.employee_service.service.impl;
 import com.microservices.employee_service.dto.APIResponseDTO;
 import com.microservices.employee_service.dto.DepartmentDTO;
 import com.microservices.employee_service.dto.EmployeeDTO;
+import com.microservices.employee_service.dto.OrganizationDTO;
 import com.microservices.employee_service.entity.Employee;
 import com.microservices.employee_service.mapper.EmployeeMapper;
 import com.microservices.employee_service.exception.ResourceNotFoundException;
@@ -19,6 +20,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+
+import javax.print.attribute.standard.OrientationRequested;
 
 @Service
 @AllArgsConstructor
@@ -55,7 +58,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         APIResponseDTO apiResponseDTO = new APIResponseDTO();
 
         DepartmentDTO departmentDTO = null;
-        String message = " Department not found for department code: " + employee.getDepartmentCode();
+        String message1 = " Department not found for department code: " + employee.getDepartmentCode();
 
         try {
             departmentDTO = webClient
@@ -68,19 +71,39 @@ public class EmployeeServiceImpl implements EmployeeService {
 
             if (departmentDTO != null) {
                 apiResponseDTO.setDepartment(departmentDTO);
-                message = "Department found successfully: " + departmentDTO.getDepartmentCode();
+                message1 = "Department found successfully: " + departmentDTO.getDepartmentCode();
             }
 
         } catch (Exception ex) {
-            message = "Error fetching department details: " + ex.getMessage();
+            message1 = "Error fetching department details: " + ex.getMessage();
             throw ex;
         }
+
+        // Fetch Organization
+        OrganizationDTO organizationDTO = null;
+        String message2 = " Organization not found for organization code: " + employee.getOrganizationCode();
+        try {
+            organizationDTO = webClient.build()
+                    .get()
+                    .uri("http://localhost:8083/api/organization/" + employee.getOrganizationCode())
+                    .retrieve()
+                    .bodyToMono(OrganizationDTO.class)
+                    .block();
+            if (organizationDTO != null) {
+                apiResponseDTO.setOrganization(organizationDTO);
+                message2 = "Organization found successfully: " + organizationDTO.getOrganizationCode();
+            }
+        } catch (Exception ex) {
+            log.error("Error fetching Organization details: {}", ex.getMessage());
+        }
+
         // Create EmployeeDTO
         EmployeeDTO employeeDTO = EmployeeMapper.toEmployeeDTO(employee);
         // Build API Response DTO
         apiResponseDTO.setEmployee(employeeDTO);
         apiResponseDTO.setDepartment(departmentDTO);
-        apiResponseDTO.setMessage(message);
+        apiResponseDTO.setOrganization(organizationDTO);
+        apiResponseDTO.setMessage(message2);
 
         return apiResponseDTO;
     }

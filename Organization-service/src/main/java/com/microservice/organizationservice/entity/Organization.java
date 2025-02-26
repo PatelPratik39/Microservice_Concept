@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDateTime;import java.time.LocalDateTime;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,5 +23,5 @@ public class Organization {
     @Column(nullable = false, unique = true)
     private String organizationCode;
     @CreationTimestamp
-    private String createdDate;
+    private LocalDateTime createdDate;
 }
