@@ -1,100 +1,127 @@
 import React, { Component } from "react";
 import EmployeeService from "../service/EmployeeService";
+import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap for styling
 
 export default class EmployeeComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      employee: {},
-      department: {},
-      organization: {}
+      employee: null,
+      department: null,
+      organization: null
     };
   }
 
   componentDidMount() {
-    EmployeeService.getEmployee().then((response) => {
-      this.setState({ employee: response.data.employee });
-      this.setState({ department: response.data.department });
-      this.setState({ organization: response.data.organization });
-
-      console.log(this.state.employee);
-      console.log(this.state.department);
-      console.log(this.state.organization);
-    });
+    EmployeeService.getEmployee()
+      .then((response) => {
+        this.setState({
+          employee: response.data.employee || {},
+          department: response.data.department || {},
+          organization: response.data.organization || {}
+        });
+      })
+      .catch((error) => {
+        console.error("Error fetching employee details:", error);
+      });
   }
+
   render() {
+    const { employee, department, organization } = this.state;
+
     return (
-      <>
-        <div className="container mt-4">
-          <div className="row justify-content-center">
-            <div className="col-md-8">
-              {/* Employee Details */}
-              <div className="card shadow-sm mb-4">
-                <div className="card-header text-center bg-primary text-white">
-                  <h4>Employee Details</h4>
-                </div>
-                <div className="card-body">
-                  <p>
-                    <strong className="text-muted">First Name:</strong>{" "}
-                    {this.state.employee.firstName}
-                  </p>
-                  <p>
-                    <strong className="text-muted">Last Name:</strong>{" "}
-                    {this.state.employee.lastName}
-                  </p>
-                  <p>
-                    <strong className="text-muted">Email:</strong>{" "}
-                    {this.state.employee.email}
-                  </p>
-                </div>
+      <div className="container mt-4">
+        <div className="row justify-content-center">
+          <div className="col-lg-26">
+            {/* Employee Details */}
+            <div className="card shadow-sm mb-4">
+              <div className="card-header text-center bg-primary text-white">
+                <h4>Employee Details</h4>
               </div>
-
-              {/* Department Details */}
-              <div className="card shadow-sm mb-4">
-                <div className="card-header text-center bg-success text-white">
-                  <h4>Department Details</h4>
-                </div>
-                <div className="card-body">
-                  <p>
-                    <strong className="text-muted">Name:</strong>{" "}
-                    {this.state.department.departmentName}
+              <div className="card-body">
+                {employee ? (
+                  <>
+                    <p>
+                      <strong className="text-muted">First Name:</strong>{" "}
+                      {employee.firstName || "N/A"}
+                    </p>
+                    <p>
+                      <strong className="text-muted">Last Name:</strong>{" "}
+                      {employee.lastName || "N/A"}
+                    </p>
+                    <p>
+                      <strong className="text-muted">Email:</strong>{" "}
+                      {employee.email || "N/A"}
+                    </p>
+                  </>
+                ) : (
+                  <p className="text-center text-danger">
+                    Employee data not available
                   </p>
-                  <p>
-                    <strong className="text-muted">Description:</strong>{" "}
-                    {this.state.department.departmentDescription}
-                  </p>
-                  <p>
-                    <strong className="text-muted">Code:</strong>{" "}
-                    {this.state.department.departmentCode}
-                  </p>
-                </div>
+                )}
               </div>
+            </div>
 
-              {/* Organization Details */}
-              <div className="card shadow-sm mb-4">
-                <div className="card-header text-center bg-dark text-white">
-                  <h4>Organization Details</h4>
-                </div>
-                <div className="card-body">
-                  <p>
-                    <strong className="text-muted">Organization Name:</strong>{" "}
-                    {this.state.organization.organizationName}
+            {/* Department Details */}
+            <div className="card shadow-sm mb-4">
+              <div className="card-header text-center bg-success text-white">
+                <h4>Department Details</h4>
+              </div>
+              <div className="card-body">
+                {department ? (
+                  <>
+                    <p>
+                      <strong className="text-muted">Name:</strong>{" "}
+                      {department.departmentName || "N/A"}
+                    </p>
+                    <p>
+                      <strong className="text-muted">Description:</strong>{" "}
+                      {department.departmentDescription || "N/A"}
+                    </p>
+                    <p>
+                      <strong className="text-muted">Code:</strong>{" "}
+                      {department.departmentCode || "N/A"}
+                    </p>
+                  </>
+                ) : (
+                  <p className="text-center text-danger">
+                    Department data not available
                   </p>
-                  <p>
-                    <strong className="text-muted">Description:</strong>{" "}
-                    {this.state.organization.organizationDescription}
+                )}
+              </div>
+            </div>
+
+            {/* Organization Details */}
+            <div className="card shadow-sm mb-4">
+              <div className="card-header text-center bg-dark text-white">
+                <h4>Organization Details</h4>
+              </div>
+              <div className="card-body">
+                {organization ? (
+                  <>
+                    <p>
+                      <strong className="text-muted">Organization Name:</strong>{" "}
+                      {organization.organizationName || "N/A"}
+                    </p>
+                    <p>
+                      <strong className="text-muted">Description:</strong>{" "}
+                      {organization.organizationDescription || "N/A"}
+                    </p>
+                    <p>
+                      <strong className="text-muted">Code:</strong>{" "}
+                      {organization.organizationCode || "N/A"}
+                    </p>
+                  </>
+                ) : (
+                  <p className="text-center text-danger">
+                    Organization data not available
                   </p>
-                  <p>
-                    <strong className="text-muted">Code:</strong>{" "}
-                    {this.state.organization.organizationCode}
-                  </p>
-                </div>
+                )}
               </div>
             </div>
           </div>
         </div>
-        
-      </>
+      </div>
     );
   }
 }
