@@ -12,11 +12,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 @OpenAPIDefinition(
 		info=@Info(
-				title = "Department Service REST APIs",
+				title = "Department-Service REST APIs",
 				description = "Department Service REST APIs Documentation",
 				version="v1.0",
 				contact = @Contact(
-						name = "Pratik",
+						name = "Pratik Patel",
 						email = "pratikpatel17791@gmail.com"
 				),
 				license = @License(
